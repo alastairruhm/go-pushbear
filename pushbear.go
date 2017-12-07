@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"time"
 )
 
 // URLPushbearService api url
@@ -20,7 +19,7 @@ type Result struct {
 	Code    int
 	Message string
 	Data    string
-	Created time.Time
+	Created string
 }
 
 // Message ...
@@ -36,23 +35,29 @@ type Pushbear struct {
 	SendKey string
 }
 
+// New ...
+func New(key string) Client {
+	return Pushbear{SendKey: key}
+}
+
 // SendMessage ...
-func (p *Pushbear) SendMessage(m Message) (*Result, error) {
+func (p Pushbear) SendMessage(m Message) (*Result, error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", URLPushbearService, nil)
 	if err != nil {
-		return nil, ErrorParamTitleEmpty
+		return nil, err
 	}
 
 	q := req.URL.Query()
 	q.Add("sendkey", p.SendKey)
 	q.Add("text", m.Title)
 	q.Add("desp", m.Desp)
+	req.URL.RawQuery = q.Encode()
 
 	resp, err := client.Do(req)
 
 	if err != nil {
-		return nil, ErrorParamTitleEmpty
+		return nil, err
 	}
 
 	defer resp.Body.Close()
@@ -60,7 +65,7 @@ func (p *Pushbear) SendMessage(m Message) (*Result, error) {
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
-		return nil, ErrorParamTitleEmpty
+		return nil, err
 	}
 
 	res := Result{}
@@ -68,7 +73,7 @@ func (p *Pushbear) SendMessage(m Message) (*Result, error) {
 	err = json.Unmarshal(body, &res)
 
 	if err != nil {
-		return nil, ErrorParamTitleEmpty
+		return nil, err
 	}
 
 	return &res, nil
