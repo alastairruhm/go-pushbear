@@ -1,0 +1,5 @@
+{
+    "Vendor": true,
+    "DisableAll": true,
+    "Enable": ["vet", "gofmt", "ineffassign", "goimports", "deadcode", "gosimple"]
+}

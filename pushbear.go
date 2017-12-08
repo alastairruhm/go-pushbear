@@ -35,6 +35,7 @@ type Message struct {
 
 // Pushbear client
 type Pushbear struct {
+	BaseURL    string
 	SendKey    string
 	httpClient *http.Client
 }
@@ -42,14 +43,23 @@ type Pushbear struct {
 var _ Client = &Pushbear{}
 
 // New create new pushbear service client
-func New(key string) Client {
-	return Pushbear{SendKey: key, httpClient: &http.Client{}}
+func New(key string) *Pushbear {
+	return &Pushbear{
+		BaseURL:    URLPushbearService,
+		SendKey:    key,
+		httpClient: &http.Client{},
+	}
 }
 
 // Send sends message
-func (p Pushbear) Send(m Message) (*Result, error) {
+func (p *Pushbear) Send(m Message) (*Result, error) {
 	res := Result{}
-	req, err := http.NewRequest("GET", URLPushbearService, nil)
+
+	if m.Title == "" {
+		return &res, ErrorParamTitleEmpty
+	}
+
+	req, err := http.NewRequest("GET", p.BaseURL, nil)
 	if err != nil {
 		return nil, err
 	}
