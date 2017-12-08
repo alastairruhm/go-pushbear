@@ -1,5 +1,8 @@
 # go-pushbear
 
+go wrapper for pushbear service: https://pushbear.ftqq.com/admin/#/
+
+
 ## example
 
 ```golang
@@ -12,7 +15,7 @@ import (
 )
 
 func main() {
-	key := "1666-8a2e7c92921db9a4e563a19e77c0c730"
+	key := "xxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 	p := pushbear.New(key)
 	res, err := p.Send(pushbear.Message{Title: "test1", Desp: "test"})
 	if err != nil {
