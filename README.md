@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/alastairruhm/go-pushbear/badge.svg?branch=master)](https://coveralls.io/github/alastairruhm/go-pushbear?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/alastairruhm/go-pushbear/badge.svg?branch=master)](https://coveralls.io/github/alastairruhm/go-pushbear?branch=master)
 # go-pushbear
 
 go wrapper for pushbear service: https://pushbear.ftqq.com/admin/#/

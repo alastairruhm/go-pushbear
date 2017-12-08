@@ -14,7 +14,7 @@ os:
 before_install:
 - go get github.com/golang/lint/golint
 # - go get github.com/FiloSottile/vendorcheck
-# - go get github.com/alecthomas/gometalinter
+- go get github.com/alecthomas/gometalinter
 # - go get github.com/gordonklaus/ineffassign
 # - go get golang.org/x/tools/cmd/goimports
 # - go get github.com/tsenart/deadcode
