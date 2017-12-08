@@ -1,4 +1,4 @@
-[![Coverage Status](https://coveralls.io/repos/github/alastairruhm/go-pushbear/badge.svg?branch=master)](https://coveralls.io/github/alastairruhm/go-pushbear?branch=master)
+[![Build Status](https://travis-ci.org/alastairruhm/go-pushbear.svg?branch=master)](https://travis-ci.org/alastairruhm/go-pushbear)
 [![Coverage Status](https://coveralls.io/repos/github/alastairruhm/go-pushbear/badge.svg?branch=master)](https://coveralls.io/github/alastairruhm/go-pushbear?branch=master)
 # go-pushbear
 
