@@ -2,24 +2,27 @@ package pushbear
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 )
 
 // URLPushbearService api url
-const URLPushbearService string = "https://pushbear.ftqq.com/sub"
+const (
+	URLPushbearService string = "https://pushbear.ftqq.com/sub"
+)
 
 // Client ...
 type Client interface {
-	SendMessage(m Message) (*Result, error)
+	Send(m Message) (*Result, error)
 }
 
 // Result ...
 type Result struct {
-	Code    int
-	Message string
-	Data    string
-	Created string
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    string `json:"data"`
+	Created string `json:"created"`
 }
 
 // Message ...
@@ -30,19 +33,22 @@ type Message struct {
 	Desp string
 }
 
-// Pushbear ...
+// Pushbear client
 type Pushbear struct {
-	SendKey string
+	SendKey    string
+	httpClient *http.Client
 }
 
-// New ...
+var _ Client = &Pushbear{}
+
+// New create new pushbear service client
 func New(key string) Client {
-	return Pushbear{SendKey: key}
+	return Pushbear{SendKey: key, httpClient: &http.Client{}}
 }
 
-// SendMessage ...
-func (p Pushbear) SendMessage(m Message) (*Result, error) {
-	client := &http.Client{}
+// Send sends message
+func (p Pushbear) Send(m Message) (*Result, error) {
+	res := Result{}
 	req, err := http.NewRequest("GET", URLPushbearService, nil)
 	if err != nil {
 		return nil, err
@@ -54,21 +60,23 @@ func (p Pushbear) SendMessage(m Message) (*Result, error) {
 	q.Add("desp", m.Desp)
 	req.URL.RawQuery = q.Encode()
 
-	resp, err := client.Do(req)
+	resp, err := p.httpClient.Do(req)
 
 	if err != nil {
 		return nil, err
 	}
 
-	defer resp.Body.Close()
+	defer func() {
+		if err = resp.Body.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
 
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
 		return nil, err
 	}
-
-	res := Result{}
 
 	err = json.Unmarshal(body, &res)
 
@@ -78,5 +86,3 @@ func (p Pushbear) SendMessage(m Message) (*Result, error) {
 
 	return &res, nil
 }
-
-var _ Client = &Pushbear{}
